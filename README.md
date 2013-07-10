@@ -12,7 +12,7 @@ simple way to ensure that the AngularJS scope is updated properly. dropstore-ng 
 allowing applications to listen for local and/or remote updates to the datastores.
 
 
-### Live Demo: <a target="_blank" href="http://analogj.github.com/dropstore-ng/example/">Real-time TODO app</a>.
+### Live Demo: <a target="_blank" href="http://analogj.github.com/dropstore-ng/example/todo/">Real-time TODO app</a>.
 
 Usage
 -----
@@ -30,7 +30,7 @@ Add the module `dropstore-ng` as a dependency to your app module:
 var myapp = angular.module('myapp', ['dropstore-ng']);
 ```
 
-Authentication + Basic Implementation
+Quick Start
 ----------------------------------
 
 Set `dropstoreService` as a service dependency in your controller:
@@ -78,7 +78,7 @@ You can display the datastore report items using the standard Dropbox Datastore 
 </ul>
 ```
 See the source for the
-[controller behind the todo app](http://analogj.github.com/dropstore-ng/example/controllers.js)
+[controller behind the todo app](http://analogj.github.com/dropstore-ng/example/todo/controllers.js)
 for a working example including syncing changes.
 
 Dropbox Datastore API Tiers and Promises
@@ -88,19 +88,24 @@ Only methods that make use of callbacks are wrapped in promises, all other insta
 I've included the full documentation on the modified instance methods, and how to use them, below:
 
 #Dropbox Client
-[Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
+All unmentioned instance methods for the standard Dropbox.Client are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
+[Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) for more information.
 
-`dropstoreClient.client`
+*dropstoreClient.client*
   alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
-`dropstoreClient.dropboxUid`
+*dropstoreService.authenticate*
 
 
-Development
+Pull Requests
 -----------
+To make a pull request, please do the following:
 
+Mention what specific version of dropbox.js and dropstore-ng.js you were using when you encountered the issue/added the feature. This can be accessed by looking at the dropstore-ng.js file header.
+Provide a pastie or gist that demonstrates the bug/feature
+Do not modify the version header. I will modify that manually when merging the request
 
 
 License
 -------
-MIT
+Copyright (c) 2013 Jason Kulatunga, released under the MIT license
