@@ -88,6 +88,7 @@ Only methods that make use of callbacks are wrapped in promises, all other insta
 I've included the full documentation on the modified instance methods, and how to use them, below:
 
 ###Dropbox Client
+-----------
 All unmentioned instance methods for the standard Dropbox.Client are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
 [Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) for more information.
 
@@ -96,7 +97,7 @@ alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datast
 
 ####dropstoreClient.authenticate
 [Dropbox.Client.authenticate](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.authenticate) has been wrapped in a promise, such that the callback parameter is not necessary.
-On success, a [dropstoreDatastoreManager] object is returned, which wraps the [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager)
+On success, a [dropstoreDatastoreManager](#dropbox-datastore-datastoremanager) object is returned, which wraps the [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager)
 ```js
     dropstoreClient.authenticate({interactive: true})
         .then(function(datastoreManager){
@@ -109,7 +110,7 @@ On success, a [dropstoreDatastoreManager] object is returned, which wraps the [D
 ```
 
 ####dropstoreClient.getDatastoreManager
-[Dropbox.Client.getDatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.getDatastoreManager) has been modified to return a [dropstoreDatastoreManager], which wraps the standard [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) in promises.
+[Dropbox.Client.getDatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.getDatastoreManager) has been modified to return a [dropstoreDatastoreManager](#dropbox-datastore-datastoremanager), which wraps the standard [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) in promises.
 
 ####dropstoreClient.signOut
 [Dropbox.Client.signOut](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.signOut) has been wrapped in a promise, such that the callback parameter is not necessary.
@@ -141,9 +142,10 @@ On success the Dropbox.AccountInfo object will be passed through and failures wi
 
 ####Other methods
 [Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) has many methods. Currently only the following methods are transparently aliased to the Client.
-dropstoreClient.dropboxUid, dropstoreClient.credentials, dropstoreClient.isAuthenticated, dropstoreClient.getUserInfo
+`dropstoreClient.dropboxUid`, `dropstoreClient.credentials`, `dropstoreClient.isAuthenticated`, `dropstoreClient.getUserInfo`
 
 ###Dropbox Datastore DatastoreManager
+-----------
 All unmentioned instance methods for the standard Dropbox.Datastore.DatastoreManager are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
 [Dropbox SDK Documentation for Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) for more information.
 
@@ -163,7 +165,7 @@ Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developer
         };
 ```
 ####dropstoreDatastoreManager.openDatastore dropstoreDatastoreManager.createDatastore
-All these methods follow the pattern listed above.
+`openDatastore` and `createDatastore` follow the pattern listed above.
 On success, a [dropstoreDatastore] object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
 Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
 
@@ -196,6 +198,69 @@ Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developer
             ..
         };
 ```
+####dropstoreDatastoreManager.DatastoreListChanged Event
+dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js events, and ensure that your $scope is updated properly.
+
+```js
+    //to subscribe to changes..
+    var ptr = datastoreManager.SubscribeDatastoreListChanged(function(datastoreListids){
+        for(var ndx in datastoreListids){
+            console.log(datastoreListids[ndx]);
+            $scope.ids = datastoreListids;
+        }
+    });
+
+    //and to unsubscribe
+    datastoreManager.UnsubscribeDatastoreListChanged(ptr);
+
+```
+
+
+###Dropbox Datastore
+-----------
+All unmentioned instance methods for the standard Dropbox.Datastore.DatastoreManager are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
+[Dropbox SDK Documentation for Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) for more information.
+
+
+####dropstoreDatastore.SyncStatusChanged  Event
+dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js events, and ensure that your $scope is updated properly.
+
+```js
+    //to subscribe to all record changes..
+    var ptr = datastore.SubscribeSyncStatusChanged (function(){
+        console.log('sync status changed');
+    });
+
+    //and to unsubscribe
+    datastore.UnsubscribeSyncStatusChanged (ptr);
+```
+
+####dropstoreDatastore.RecordsChanged Event
+dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js events, and ensure that your $scope is updated properly.
+The `SubscribeRecordsChanged` method also takes a optional secondary parameter `tableid` that automatically retrieves the records that changed for a specific table.
+
+```js
+    //to subscribe to all record changes..
+    var ptr = datastore.SubscribeRecordsChanged(function(event){
+        var records = event.affectedRecordsForTable('tasks');
+        for(var ndx in records){
+            console.log(records[ndx].get('taskname'));
+            $scope.tasks.push(records[ndx]);
+        }
+    });
+
+    //with optional tableid parameter
+    var ptr = datastore.SubscribeRecordsChanged(function(records){
+        for(var ndx in records){
+            console.log(records[ndx].get('taskname'));
+            $scope.tasks.push(records[ndx]);
+        }
+    }, 'tasks');
+
+    //and to unsubscribe
+    datastore.UnsubscribeRecordsChanged(ptr);
+```
+
 
 Pull Requests
 -----------
