@@ -7,7 +7,7 @@
  */
 angular.module('testApp.controllers', [])
     //Panel Controllers
-    .controller('pageTestCtrl', function ($scope, $rootScope, dropstoreClient) {
+    .controller('pageTestCtrl', function ($scope, $rootScope,safeApply, dropstoreClient) {
         var _datastore = null;
         $scope.tasks = [];
         dropstoreClient.authenticate({interactive: true})
@@ -23,10 +23,12 @@ angular.module('testApp.controllers', [])
                 var fqtopic = datastore.subscribe('tasks');
 
                 $rootScope.$on(fqtopic, function(event, records) {
-                    console.log(records[fqtopic]);
+                    console.log('record added', records);
                     for(var ndx in records){
-                        console.log(records[ndx].get('taskname'));
+                        console.log(records[ndx].get('taskname'), 'current tasks', $scope.tasks);
+
                         $scope.tasks.push(records[ndx]);
+                        safeApply($scope); //todo:for some reason the $on function is not updating the scope properly when updates occur on non-local browser.
                     }
                 });
 

@@ -2,7 +2,7 @@
 
 /* Services */
 
-angular.module("dropstoreService", []).
+angular.module("dropstore-ng", []).
     factory('dropstoreClient', function($rootScope,$q,safeApply,dropstoreDatastoreManager) {
         //Partially based on: https://gist.github.com/katowulf/5006634
         var dropstoreService = {};
