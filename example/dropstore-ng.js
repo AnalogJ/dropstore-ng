@@ -50,7 +50,17 @@ angular.module("dropstore-ng", []).
         ///////////////////////////////////////////////////////////////////////
         //should never be called directly, but is available for custom calls.
 
-        dropstoreService._client = new Dropbox.Client({key: APP_KEY});;
+        dropstoreService._client = new Dropbox.Client({key: APP_KEY});
+        /**
+         * Dropbox API client representing an user or an application.
+         * For an optimal user experience, applications should use a single client for all Dropbox interactions.
+         * Maps directly to the Dropbox.Client constructor
+         * @param options
+         */
+        dropstoreService.client = function(options){
+            dropstoreService._client = new Dropbox.Client(options);
+        }
+
         /**
          *  Authenticates the app's user to Dropbox's API server.
          *  In most cases, the process will involve sending the user to an authorization server on the Dropbox servers.

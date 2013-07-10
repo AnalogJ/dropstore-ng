@@ -5,9 +5,10 @@ dropstore-ng is a set of [AngularJS](http://angularjs.org/) bindings for [Dropbo
 With Drobox Datastore, AngularJS and dropstore-ng you can easily create completely serverless client-side applications with syncing across multiple devices !
 
 The bindings wrap the first three tiers (Client, DatastoreManager, Datastore) of the Dropbox Datastore API within
-[Angular Promises](http://docs.angularjs.org/api/ng.$q). This creates a easy to follow chain of async function calls rather
-than the hell usually associated with callback heavy libraries. The other main reason to wrap the Dropbox Datastore API was to
-provide a simple way to ensure that the AngularJS scope is updated properly. dropstore-ng also provides AngularJS publish/subscribe functionality
+[Angular Promises](http://docs.angularjs.org/api/ng.$q). This is because only the first three tiers use callbacks and because
+ it creates a easy to follow chain of async function calls rather than the hell usually associated with callback heavy libraries.
+ The Dropbox Datastore API is also wrapped with promises to create a
+simple way to ensure that the AngularJS scope is updated properly. dropstore-ng also provides AngularJS publish/subscribe functionality
 allowing applications to listen for local and/or remote updates to the datastores.
 
 
@@ -79,6 +80,21 @@ You can display the datastore report items using the standard Dropbox Datastore 
 See the source for the
 [controller behind the todo app](http://analogj.github.com/dropstore-ng/example/controllers.js)
 for a working example including syncing changes.
+
+Dropbox Datastore API Tiers and Promises
+-----------
+As I stated above, only the first three tiers of the Dropbox Datastore API are wrapped in AngularJS Promises.
+Only methods that make use of callbacks are wrapped in promises,all other instance methods are passed through like usual.
+I've included the full documentation on the modified instance methods, and how to use them, below:
+
+#Dropbox Client
+-----------
+[Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
+
+### dropstoreService.client
+alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
+
+
 
 Development
 -----------
