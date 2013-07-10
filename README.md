@@ -81,7 +81,7 @@ See the source for the
 [controller behind the todo app](http://analogj.github.com/dropstore-ng/example/todo/controllers.js)
 for a working example including syncing changes.
 
-Dropbox Datastore API Tiers and Promises
+Dropbox Datastore API and Promises
 -----------
 As I stated above, only the first three tiers of the Dropbox Datastore API are wrapped in AngularJS Promises.
 Only methods that make use of callbacks are wrapped in promises, all other instance methods are passed through like usual.
@@ -139,6 +139,67 @@ On success the Dropbox.AccountInfo object will be passed through and failures wi
         };
 ```
 
+####Other methods
+[Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) has many methods. Currently only the following methods are transparently aliased to the Client.
+dropstoreClient.dropboxUid, dropstoreClient.credentials, dropstoreClient.isAuthenticated, dropstoreClient.getUserInfo
+
+###Dropbox Datastore DatastoreManager
+All unmentioned instance methods for the standard Dropbox.Datastore.DatastoreManager are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
+[Dropbox SDK Documentation for Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) for more information.
+
+
+####dropstoreDatastoreManager.openDefaultDatastore
+[Dropbox.Datastore.DatastoreManager.openDefaultDatastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager.openDefaultDatastore) has been wrapped in a promise, such that the callback parameter is not necessary.
+On success, a [dropstoreDatastore] object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
+Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
+```js
+    dropstoreDatastoreManager.openDefaultDatastore()
+        .then(function(datastore){
+            console.log('openDefaultDatastore successful');
+            ..
+        }, function(error){
+            console.log('openDefaultDatastore failure');
+            ..
+        };
+```
+####dropstoreDatastoreManager.openDatastore dropstoreDatastoreManager.createDatastore
+All these methods follow the pattern listed above.
+On success, a [dropstoreDatastore] object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
+Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
+
+####dropstoreDatastoreManager.listDatastoreIds
+[Dropbox.Datastore.DatastoreManager.listDatastoreIds](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager.listDatastoreIds) has been wrapped in a promise, such that the callback parameter is not necessary.
+On success, a `Array<String>` is returned, which lists the IDs of all accessible datastores.
+Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
+```js
+    dropstoreDatastoreManager.listDatastoreIds()
+        .then(function(datastore){
+            console.log('listDatastoreIds successful');
+            ..
+        }, function(error){
+            console.log('listDatastoreIds failure');
+            ..
+        };
+```
+
+####dropstoreDatastoreManager.deleteDatastore
+[Dropbox.Datastore.DatastoreManager.deleteDatastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager.deleteDatastore) has been wrapped in a promise, such that the callback parameter is not necessary.
+On success nothing is returned
+Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
+```js
+    dropstoreDatastoreManager.deleteDatastore()
+        .then(function(){
+            console.log('deleteDatastore successful');
+            ..
+        }, function(error){
+            console.log('deleteDatastore failure');
+            ..
+        };
+```
+
+Pull Requests
+-----------
+[Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) has many methods. Currently only the methods directly related to account information or authentication are handled, other file related instance methods should be coming shortly.
 
 Pull Requests
 -----------
