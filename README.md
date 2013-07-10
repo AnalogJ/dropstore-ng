@@ -88,12 +88,12 @@ Only methods that make use of callbacks are wrapped in promises,all other instan
 I've included the full documentation on the modified instance methods, and how to use them, below:
 
 #Dropbox Client
------------
 [Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
-### dropstoreService.client
+`dropstoreClient.client`
 alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
+`dropstoreClient.dropboxUid`
 
 
 Development

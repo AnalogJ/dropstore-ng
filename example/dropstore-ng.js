@@ -44,6 +44,19 @@ angular.module("dropstore-ng", []).
                 });
             }
         }
+        function basicDeferredCallback(deferred, cmdName){
+            return function(err, res){
+                safeApply($rootScope,function() {
+                    if (err) {
+                        DEVMODE && console.log('dropstore "'+cmdName+'" returned error', err);
+                        deferred.reject(err)
+                    } else {
+                        DEVMODE && console.log('dropstore "'+cmdName+'" returned successfully', res);
+                        deferred.resolve(res)
+                    }
+                });
+            }
+        }
 
         ///////////////////////////////////////////////////////////////////////
         // Public Methods
@@ -83,13 +96,46 @@ angular.module("dropstore-ng", []).
         dropstoreService.getDatastoreManager = function(){
             return dropstoreDatastoreManager(dropstoreService._client,DEVMODE);
         }
-
-
-
+        /**
+         * Invalidates and forgets the user's Dropbox OAuth 2 access token.
+         * This should be called when the user explicitly signs off from your application, to meet the users' expectation that after they sign out, their access tokens will not be persisted on the machine.
+         * @param options
+         * @returns {*}
+         */
+        dropstoreService.signOut = function(options){
+            var deferred = $q.defer();
+            dropstoreService._client.signOut(options,basicDeferredCallback(deferred, 'signOut'));
+            return deferred.promise;
+        }
+        /**
+         * Retrieves information about the logged in user.
+         * @param options
+         * @returns {*}
+         */
+        dropstoreService.getAccountInfo = function(options){
+            var deferred = $q.defer();
+            dropstoreService._client.getAccountInfo(options,basicDeferredCallback(deferred, 'getAccountInfo'));
+            return deferred.promise;
+        }
+        ///////////////////////////////////////////////////////////////////////
+        // Aliased Methods
+        ///////////////////////////////////////////////////////////////////////
+        dropstoreService.dropboxUid = function(){
+            return dropstoreService._client.dropboxUid.apply(this, arguments);
+        }
+        dropstoreService.credentials = function(){
+            return dropstoreService._client.credentials.apply(this, arguments);
+        }
+        dropstoreService.isAuthenticated = function(){
+            return dropstoreService._client.isAuthenticated.apply(this, arguments);
+        }
+        dropstoreService.getUserInfo = function(){
+            return dropstoreService._client.getUserInfo.apply(this, arguments);
+        }
 
         return dropstoreService;
     })
-    .factory('dropstoreDatastoreManager', function($rootScope,$q,safeApply, dropstoreDatastore) {
+    .factory('dropstoreDatastoreManager', function($rootScope,$q,safeApply, dropstoreDatastore, pubsub) {
 
         return function(_client, DEVMODE){
             DEVMODE = DEVMODE || false;
@@ -182,6 +228,21 @@ angular.module("dropstore-ng", []).
                 dropstoreDatastoreManagerService._datastoreManager.listDatastoreIds(basicDeferredCallback(deferred, 'listDatastoreIds'));
                 return deferred.promise;
             }
+            ///////////////////////////////////////////////////////////////////////
+            // Public PUBSUB Methods // Listen for Datasource Changes.
+            ///////////////////////////////////////////////////////////////////////
+            var datastoreListChangedHandler = function(){
+                safeApply($rootScope, function(){
+                    callback.apply($rootScope, arguments);
+                });
+
+            }
+            dropstoreDatastoreManagerService.SubscribeDatastoreListChanged = function(callback){
+                dropstoreDatastoreManagerService._datastoreManager.datastoreListChanged.addListener(datastoreListChangedHandler)
+            }
+            dropstoreDatastoreManagerService.UnsubscribeDatastoreListChanged = function(callback){
+                dropstoreDatastoreManagerService._datastoreManager.datastoreListChanged.removeListener(datastoreListChangedHandler)
+            }
 
             return dropstoreDatastoreManagerService;
         }
@@ -225,52 +286,24 @@ angular.module("dropstore-ng", []).
             dropstoreDatastoreService._datastoreManager = datastoreManager;
 
 
-            /**
-             * Creates a Table instance for a given table ID.
-             * @returns {*} Dropbox.Datastore
-             */
-            dropstoreDatastoreService.getTable =  function(tableId) {
-                var deferred = $q.defer();
-                immediateDeferredCallback(deferred,dropstoreDatastoreService._datastore.getTable(tableId),'getTable:'+tableId);
-                return deferred.promise;
+
+            ///////////////////////////////////////////////////////////////////////
+            // Aliased Methods
+            ///////////////////////////////////////////////////////////////////////
+            dropstoreDatastoreService.getTable = function(){
+                return dropstoreDatastoreService._datastore.getTable.apply(this, arguments);
             }
-            /**
-             * The IDs of all the tables in this datastore.
-             * Tables that contain no records are not listed.
-             * @returns {*} Dropbox.Datastore
-             */
-            dropstoreDatastoreService.listTableIds =  function() {
-                var deferred = $q.defer();
-                immediateDeferredCallback(deferred,dropstoreDatastoreService._datastore.listTableIds(),'listTableIds');
-                return deferred.promise;
+            dropstoreDatastoreService.listTableIds = function(){
+                return dropstoreDatastoreService._datastore.listTableIds.apply(this, arguments);
             }
-            /**
-             * Closes the datastore.
-             * After a call to Dropbox.Datastore#close, you can no longer call methods that read or modify tables or records of the datastore.
-             * @returns {*}
-             */
-            dropstoreDatastoreService.close =  function() {
-                var deferred = $q.defer();
-                immediateDeferredCallback(deferred,dropstoreDatastoreService._datastore.close(),'close');
-                return deferred.promise;
+            dropstoreDatastoreService.close = function(){
+                return dropstoreDatastoreService._datastore.close.apply(this, arguments);
             }
-            /**
-             * Returns this datastore's ID.
-             * @returns {*}
-             */
-            dropstoreDatastoreService.getId =  function() {
-                return dropstoreDatastoreService._datastore.getId();
+            dropstoreDatastoreService.getId = function(){
+                return dropstoreDatastoreService._datastore.getId.apply(this, arguments);
             }
-            /**
-             * Returns an object representing the sync status of the datastore.
-             * The returned object has a single property:
-             * uploading: true if there are changes to the datastore that have not been synced to the server yet. This can happen if, for example, the application is temporarily offline.
-             * @returns {*} Dropbox.Datastore
-             */
-            dropstoreDatastoreService.getSyncStatus =  function() {
-                var deferred = $q.defer();
-                immediateDeferredCallback(deferred,dropstoreDatastoreService._datastore.getSyncStatus(),'getSyncStatus');
-                return deferred.promise;
+            dropstoreDatastoreService.getSyncStatus = function(){
+                return dropstoreDatastoreService._datastore.getSyncStatus.apply(this, arguments);
             }
 
             ///////////////////////////////////////////////////////////////////////
