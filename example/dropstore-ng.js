@@ -271,10 +271,13 @@ angular.module("dropstoreService", []).
             function isListeningToUpdates(){
                 return _isListening;
             }
-            function _eventHandler(event) {
+            var eventHandler = function (event) {
+                console.log('inside event handler')
                 var updates = event.affectedRecordsByTable();
+
                 for(var key in updates){
                     var records = updates[key]
+                    console.log(records);
                     if(dropstoreDatastoreService._cache[key]){
                         dropstoreDatastoreService.publish(key, records);
                     }
@@ -282,13 +285,14 @@ angular.module("dropstoreService", []).
             }
             function startListeningToUpdates(){
                 _isListening = true;
-
-                dropstoreDatastoreService._datastore.addListener(_eventHandler);
+                DEVMODE && console.log('dropstore started listening for updates');
+                dropstoreDatastoreService._datastore.recordsChanged.addListener(eventHandler);
 
             }
             function stopListeningToUpdates(){
                 _isListening = false;
-                dropstoreDatastoreService._datastore.removeListener(_eventHandler)
+                DEVMODE && console.log('dropstore stopped listening for updates');
+                dropstoreDatastoreService._datastore.recordsChanged.removeListener(eventHandler)
             }
 
             dropstoreDatastoreService.subscribe = function(topic){
@@ -299,6 +303,8 @@ angular.module("dropstoreService", []).
                 if(!isListeningToUpdates()){
                     startListeningToUpdates();
                 }
+                //return the fully qualified topic to listen to.
+                return  '/'+dropstoreDatastoreService.getId()+'/'+topic;
             }
             dropstoreDatastoreService.unsubscribe = function(topic){
 

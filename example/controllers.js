@@ -18,6 +18,18 @@ angular.module('testApp.controllers', [])
             .then(function(datastore){
                 console.log('completed openDefaultDatastore');
                 _datastore = datastore;
+
+                //start listening to updates to the tasks table.
+                var fqtopic = datastore.subscribe('tasks');
+
+                $rootScope.$on(fqtopic, function(event, records) {
+                    console.log(records[fqtopic]);
+                    for(var ndx in records){
+                        console.log(records[ndx].get('taskname'));
+                        $scope.tasks.push(records[ndx]);
+                    }
+                });
+
                 return datastore.getTable('tasks');
             })
             .then(function(taskTable){
