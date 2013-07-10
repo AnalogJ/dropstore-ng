@@ -87,14 +87,57 @@ As I stated above, only the first three tiers of the Dropbox Datastore API are w
 Only methods that make use of callbacks are wrapped in promises, all other instance methods are passed through like usual.
 I've included the full documentation on the modified instance methods, and how to use them, below:
 
-#Dropbox Client
+###Dropbox Client
 All unmentioned instance methods for the standard Dropbox.Client are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
 [Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) for more information.
 
-*dropstoreClient.client*
-  alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
+####dropstoreClient.client
+alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
-*dropstoreService.authenticate*
+####dropstoreClient.authenticate
+[Dropbox.Client.authenticate](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.authenticate) has been wrapped in a promise, such that the callback parameter is not necessary.
+On success, a [dropstoreDatastoreManager] object is returned, which wraps the [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager)
+```js
+    dropstoreClient.authenticate({interactive: true})
+        .then(function(datastoreManager){
+            console.log('auth successful');
+            ..
+        }, function(error){
+            console.log('auth failure');
+            ..
+        };
+```
+
+####dropstoreClient.getDatastoreManager
+[Dropbox.Client.getDatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.getDatastoreManager) has been modified to return a [dropstoreDatastoreManager], which wraps the standard [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) in promises.
+
+####dropstoreClient.signOut
+[Dropbox.Client.signOut](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.signOut) has been wrapped in a promise, such that the callback parameter is not necessary.
+On success nothing is returned, however failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
+```js
+    dropstoreClient.signOut({mustInvalidate: true})
+        .then(function(){
+            console.log('signout successful');
+            ..
+        }, function(error){
+            console.log('signout failure');
+            ..
+        };
+```
+
+####dropstoreClient.getAccountInfo
+[Dropbox.Client.getAccountInfo](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.getAccountInfo) has been wrapped in a promise, such that the callback parameter is not necessary.
+On success the Dropbox.AccountInfo object will be passed through and failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
+```js
+    dropstoreClient.getAccountInfo({httpCache: true})
+        .then(function(accountInfo){
+            console.log('getAccountIno successful');
+            ..
+        }, function(error){
+            console.log('getAccountInfo failure');
+            ..
+        };
+```
 
 
 Pull Requests
