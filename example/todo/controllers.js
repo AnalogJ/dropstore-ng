@@ -21,7 +21,7 @@ angular.module('testApp.controllers', [])
 
                 //start listening to updates to the tasks table.
 
-                _datastore.SubscribeTableRecordsChanged(function(records){
+                _datastore.SubscribeRecordsChanged(function(records){
 
                     for(var ndx in records){
                         console.log(records[ndx].get('taskname'));
