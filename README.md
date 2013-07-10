@@ -91,7 +91,7 @@ I've included the full documentation on the modified instance methods, and how t
 [Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
 `dropstoreClient.client`
-alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
+  alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
 `dropstoreClient.dropboxUid`
 
