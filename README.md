@@ -84,7 +84,7 @@ for a working example including syncing changes.
 Dropbox Datastore API Tiers and Promises
 -----------
 As I stated above, only the first three tiers of the Dropbox Datastore API are wrapped in AngularJS Promises.
-Only methods that make use of callbacks are wrapped in promises,all other instance methods are passed through like usual.
+Only methods that make use of callbacks are wrapped in promises, all other instance methods are passed through like usual.
 I've included the full documentation on the modified instance methods, and how to use them, below:
 
 #Dropbox Client

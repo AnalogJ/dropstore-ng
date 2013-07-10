@@ -120,22 +120,23 @@ angular.module("dropstore-ng", []).
         ///////////////////////////////////////////////////////////////////////
         // Aliased Methods
         ///////////////////////////////////////////////////////////////////////
+        var ctx = dropstoreService._client;
         dropstoreService.dropboxUid = function(){
-            return dropstoreService._client.dropboxUid.apply(this, arguments);
+            return dropstoreService._client.dropboxUid.apply(ctx, arguments);
         }
         dropstoreService.credentials = function(){
-            return dropstoreService._client.credentials.apply(this, arguments);
+            return dropstoreService._client.credentials.apply(ctx, arguments);
         }
         dropstoreService.isAuthenticated = function(){
-            return dropstoreService._client.isAuthenticated.apply(this, arguments);
+            return dropstoreService._client.isAuthenticated.apply(ctx, arguments);
         }
         dropstoreService.getUserInfo = function(){
-            return dropstoreService._client.getUserInfo.apply(this, arguments);
+            return dropstoreService._client.getUserInfo.apply(ctx, arguments);
         }
 
         return dropstoreService;
     })
-    .factory('dropstoreDatastoreManager', function($rootScope,$q,safeApply, dropstoreDatastore, pubsub) {
+    .factory('dropstoreDatastoreManager', function($rootScope,$q,safeApply, dropstoreDatastore) {
 
         return function(_client, DEVMODE){
             DEVMODE = DEVMODE || false;
@@ -231,17 +232,20 @@ angular.module("dropstore-ng", []).
             ///////////////////////////////////////////////////////////////////////
             // Public PUBSUB Methods // Listen for Datasource Changes.
             ///////////////////////////////////////////////////////////////////////
-            var datastoreListChangedHandler = function(){
-                safeApply($rootScope, function(){
-                    callback.apply($rootScope, arguments);
-                });
-
+            var datastoreListChangedHandler = function(callback){
+                return function(arr){
+                    safeApply($rootScope, function(){
+                        callback(arr);
+                    });
+                }
             }
             dropstoreDatastoreManagerService.SubscribeDatastoreListChanged = function(callback){
-                dropstoreDatastoreManagerService._datastoreManager.datastoreListChanged.addListener(datastoreListChangedHandler)
+                var fn = datastoreListChangedHandler(callback);
+                dropstoreDatastoreManagerService._datastoreManager.datastoreListChanged.addListener();
+                return fn;
             }
-            dropstoreDatastoreManagerService.UnsubscribeDatastoreListChanged = function(callback){
-                dropstoreDatastoreManagerService._datastoreManager.datastoreListChanged.removeListener(datastoreListChangedHandler)
+            dropstoreDatastoreManagerService.UnsubscribeDatastoreListChanged = function(fn){
+                dropstoreDatastoreManagerService._datastoreManager.datastoreListChanged.removeListener(fn);
             }
 
             return dropstoreDatastoreManagerService;
@@ -290,85 +294,61 @@ angular.module("dropstore-ng", []).
             ///////////////////////////////////////////////////////////////////////
             // Aliased Methods
             ///////////////////////////////////////////////////////////////////////
+            var ctx = dropstoreDatastoreService._datastore;
             dropstoreDatastoreService.getTable = function(){
-                return dropstoreDatastoreService._datastore.getTable.apply(this, arguments);
+                return dropstoreDatastoreService._datastore.getTable.apply(ctx,arguments);
             }
             dropstoreDatastoreService.listTableIds = function(){
-                return dropstoreDatastoreService._datastore.listTableIds.apply(this, arguments);
+                return dropstoreDatastoreService._datastore.listTableIds.apply(ctx, arguments);
             }
             dropstoreDatastoreService.close = function(){
-                return dropstoreDatastoreService._datastore.close.apply(this, arguments);
+                return dropstoreDatastoreService._datastore.close.apply(ctx, arguments);
             }
             dropstoreDatastoreService.getId = function(){
-                return dropstoreDatastoreService._datastore.getId.apply(this, arguments);
+                return dropstoreDatastoreService._datastore.getId.apply(ctx, arguments);
             }
             dropstoreDatastoreService.getSyncStatus = function(){
-                return dropstoreDatastoreService._datastore.getSyncStatus.apply(this, arguments);
+                return dropstoreDatastoreService._datastore.getSyncStatus.apply(ctx, arguments);
             }
 
             ///////////////////////////////////////////////////////////////////////
             // Public PUBSUB Methods // Listen for Datasource Changes.
             ///////////////////////////////////////////////////////////////////////
-            dropstoreDatastoreService._cache = {}; //for PUBSUB functionality.
-            var _isListening = false;
-            function isListeningToUpdates(){
-                return _isListening;
+            var datastoreEventHandler = function(callback){
+                return function(arr){
+                    safeApply($rootScope, function(){
+                        callback(arr);
+                    });
+                }
             }
-            var eventHandler = function (event) {
-                console.log('inside event handler')
-                var updates = event.affectedRecordsByTable();
+            dropstoreDatastoreService.SubscribeRecordsChanged = function(callback, tableid){
+                var fn = function(){};
+                if(tableid){
+                    fn = datastoreEventHandler(function(event){
+                        var records = event.affectedRecordsForTable(tableid);
+                        callback(records);
+                    });
+                }
+                else{
+                    fn = datastoreEventHandler(callback);
+                }
 
-                for(var key in updates){
-                    var records = updates[key]
-                    console.log(records);
-                    if(dropstoreDatastoreService._cache[key]){
-                        dropstoreDatastoreService.publish(key, records);
-                    }
-                }
+                dropstoreDatastoreService._datastore.recordsChanged.addListener(fn);
+                return fn;
             }
-            function startListeningToUpdates(){
-                _isListening = true;
-                DEVMODE && console.log('dropstore started listening for updates');
-                dropstoreDatastoreService._datastore.recordsChanged.addListener(eventHandler);
-
-            }
-            function stopListeningToUpdates(){
-                _isListening = false;
-                DEVMODE && console.log('dropstore stopped listening for updates');
-                dropstoreDatastoreService._datastore.recordsChanged.removeListener(eventHandler)
+            dropstoreDatastoreService.SubscribeSyncStatusChanged = function(fn){
+                var fn = datastoreEventHandler(callback);
+                dropstoreDatastoreService._datastore.syncStatusChanged.addListener(fn);
+                return fn;
             }
 
-            dropstoreDatastoreService.subscribe = function(topic){
-                if(!dropstoreDatastoreService._cache[topic]){
-                    dropstoreDatastoreService._cache[topic] = 0;
-                }
-                dropstoreDatastoreService._cache[topic] += 1; //increment the subscriber counter for the topic.
-                if(!isListeningToUpdates()){
-                    startListeningToUpdates();
-                }
-                //return the fully qualified topic to listen to.
-                return  '/'+dropstoreDatastoreService.getId()+'/'+topic;
+            dropstoreDatastoreService.UnsubscribeSyncStatusChanged = function(fn){
+                dropstoreDatastoreService._datastore.syncStatusChanged.removeListener(fn);
             }
-            dropstoreDatastoreService.unsubscribe = function(topic){
 
-                if(!dropstoreDatastoreService._cache[topic]){
-                    dropstoreDatastoreService._cache[topic] = 0;
-                }
-                dropstoreDatastoreService._cache[topic]-= 1;
-                if(dropstoreDatastoreService._cache[topic]<=0){
-                    delete dropstoreDatastoreService._cache[topic];
-                }
-                var prop_count = 0;
-                for(var prop in dropstoreDatastoreService._cache[topic]){
-                    prop_count++;
-                }
-                if(prop_count == 0){
-                    stopListeningToUpdates();
-                }
-            }
-            dropstoreDatastoreService.publish = function(topic,records){
-                $rootScope.$broadcast('/'+dropstoreDatastoreService.getId()+'/'+topic, records);
-            }
+
+
+
             return dropstoreDatastoreService;
         }
     }).factory('safeApply', [function($rootScope) {

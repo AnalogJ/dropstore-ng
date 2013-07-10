@@ -20,7 +20,17 @@ angular.module('testApp.controllers', [])
                 _datastore = datastore;
 
                 //start listening to updates to the tasks table.
-                var fqtopic = datastore.subscribe('tasks');
+
+                _datastore.SubscribeTableRecordsChanged(function(records){
+
+                    for(var ndx in records){
+                        console.log(records[ndx].get('taskname'));
+
+                        $scope.tasks.push(records[ndx]);
+                    }
+                },'tasks');
+
+                /*var fqtopic = datastore.subscribe('tasks');
 
                 $rootScope.$on(fqtopic, function(event, records) {
                     console.log('record added', records);
@@ -28,26 +38,24 @@ angular.module('testApp.controllers', [])
                         console.log(records[ndx].get('taskname'), 'current tasks', $scope.tasks);
 
                         $scope.tasks.push(records[ndx]);
-                        safeApply($scope); //todo:for some reason the $on function is not updating the scope properly when updates occur on non-local browser.
                     }
+                    safeApply($scope); //todo:for some reason the $on function is not updating the scope properly when updates occur on non-local browser.
                 });
-
-                return datastore.getTable('tasks');
-            })
-            .then(function(taskTable){
+                */
+                var taskTable = datastore.getTable('tasks');
                 $scope.tasks =  taskTable.query();
-            });
+            })
 
         $scope.newTaskName = '';
         $scope.handleNewTask = function(){
-            _datastore.getTable('tasks')
-                .then(function(taskTable){
+            var taskTable = _datastore.getTable('tasks')
+
                     var firstTask = taskTable.insert({
                         taskname: $scope.newTaskName,
                         completed: false,
                         created: new Date()
                     });
-                })
+
         }
 
 
