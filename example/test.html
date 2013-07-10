@@ -1,0 +1,8 @@
+<ul>
+    <li ng-repeat="task in tasks">
+       {{task.get('taskname')}}
+    </li>
+</ul>
+
+<input type="text" ng-model="newTaskName"/>
+        <button type="button" ng-click="handleNewTask()">Add</button>
