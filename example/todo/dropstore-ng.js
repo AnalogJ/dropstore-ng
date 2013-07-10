@@ -5,8 +5,10 @@
 
 /* Services */
 
+
 angular.module("dropstore-ng", []).
     factory('dropstoreClient', function($rootScope,$q,safeApply,dropstoreDatastoreManager) {
+
         //Partially based on: https://gist.github.com/katowulf/5006634
         var dropstoreService = {};
         console.log('Creating dropstoreClient');
@@ -369,3 +371,14 @@ angular.module("dropstore-ng", []).
             }
         }
     }])
+    .factory('recordWrapper', [function() {
+        return function (record, fieldId){
+            var _record = record;
+            return {
+                get mdl() { return _record.get(fieldId); },
+                set mdl(val) { _record.set(fieldId, val); }
+            }
+        }
+    }])
+
+
