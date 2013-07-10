@@ -10,7 +10,6 @@ angular.module("dropstore-ng", []).
         ///////////////////////////////////////////////////////////////////////
         // Configuration
         ///////////////////////////////////////////////////////////////////////
-        var APP_KEY = '3xqz1dtko5plr99';
 
         // when true, all Dropbox Datastore ops are logged to the JavaScript console
         // some critical errors and warnings are always logged, even if this is false
@@ -63,15 +62,15 @@ angular.module("dropstore-ng", []).
         ///////////////////////////////////////////////////////////////////////
         //should never be called directly, but is available for custom calls.
 
-        dropstoreService._client = new Dropbox.Client({key: APP_KEY});
         /**
          * Dropbox API client representing an user or an application.
          * For an optimal user experience, applications should use a single client for all Dropbox interactions.
          * Maps directly to the Dropbox.Client constructor
          * @param options
          */
-        dropstoreService.client = function(options){
+        dropstoreService.create = function(options){
             dropstoreService._client = new Dropbox.Client(options);
+            return dropstoreService;
         }
 
         /**

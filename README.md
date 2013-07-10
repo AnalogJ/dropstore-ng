@@ -49,7 +49,8 @@ drobstore-ng just wraps the standard [authenticate](https://www.dropbox.com/deve
 
 ```js
 $scope.tasks = [];
-dropstoreClient.authenticate({interactive: true})
+dropstoreClient.create({key: 'YOUR_APP_KEY_HERE'})
+    .authenticate({interactive: true})
     .then(function(datastoreManager){
         console.log('completed authentication');
         return datastoreManager.openDefaultDatastore();
@@ -92,7 +93,7 @@ I've included the full documentation on the modified instance methods, and how t
 All unmentioned instance methods for the standard Dropbox.Client are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
 [Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) for more information.
 
-####dropstoreClient.client
+####dropstoreClient.create
 alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
 ####dropstoreClient.authenticate
@@ -152,7 +153,7 @@ All unmentioned instance methods for the standard Dropbox.Datastore.DatastoreMan
 
 ####dropstoreDatastoreManager.openDefaultDatastore
 [Dropbox.Datastore.DatastoreManager.openDefaultDatastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager.openDefaultDatastore) has been wrapped in a promise, such that the callback parameter is not necessary.
-On success, a [dropstoreDatastore] object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
+On success, a [dropstoreDatastore](#dropbox-datastore) object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
 Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
 ```js
     dropstoreDatastoreManager.openDefaultDatastore()
@@ -166,7 +167,7 @@ Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developer
 ```
 ####dropstoreDatastoreManager.openDatastore dropstoreDatastoreManager.createDatastore
 `openDatastore` and `createDatastore` follow the pattern listed above.
-On success, a [dropstoreDatastore] object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
+On success, a [dropstoreDatastore](#dropbox-datastore) object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
 Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
 
 ####dropstoreDatastoreManager.listDatastoreIds
@@ -262,9 +263,10 @@ The `SubscribeRecordsChanged` method also takes a optional secondary parameter `
 ```
 
 
-Pull Requests
+TODO
 -----------
-[Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) has many methods. Currently only the methods directly related to account information or authentication are handled, other file related instance methods should be coming shortly.
+- [Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) has many methods. Currently only the methods directly related to account information or authentication are handled, other file related instance methods should be coming shortly.
+- Tests for the dropstore-ng framework are coming shortly.
 
 Pull Requests
 -----------

@@ -10,7 +10,8 @@ angular.module('testApp.controllers', [])
     .controller('pageTestCtrl', function ($scope, $rootScope, dropstoreClient) {
         var _datastore = null;
         $scope.tasks = [];
-        dropstoreClient.authenticate({interactive: true})
+        dropstoreClient.create({key: '3xqz1dtko5plr99'})
+            .authenticate({interactive: true})
             .then(function(datastoreManager){
                 console.log('completed authentication');
                 return datastoreManager.openDefaultDatastore();
