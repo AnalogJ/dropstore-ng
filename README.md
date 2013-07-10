@@ -279,4 +279,4 @@ Do not modify the version header. I will modify that manually when merging the r
 
 License
 -------
-Copyright (c) 2013 Jason Kulatunga, released under the MIT license
+Copyright (c) 2013 Jason Kulatunga, released under the [MIT license](http://analogj.mit-license.org/)
