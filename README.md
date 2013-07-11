@@ -64,11 +64,9 @@ the datastoreManager and the datastore objects has been modified such that their
 ```js
     ...
     .then(function(datastore){
-        return datastore.getTable('tasks');
-    })
-    .then(function(taskTable){
+        var taskTable = datastore.getTable('tasks');
         $scope.tasks =  taskTable.query();
-    });
+    })
 ```
 
 You can display the datastore report items using the standard Dropbox Datastore API commands:
