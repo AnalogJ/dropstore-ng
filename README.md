@@ -12,7 +12,9 @@ simple way to ensure that the AngularJS scope is updated properly. dropstore-ng 
 allowing applications to listen for local and/or remote updates to the datastores.
 
 
-### Live Demo: <a target="_blank" href="http://analogj.github.com/dropstore-ng/example/todo/">Real-time TODO app</a>.
+### Not So Live Demo: ~~<a target="_blank" href="http://analogj.github.com/dropstore-ng/example/todo/">Real-time TODO app</a>.~~
+Unfortunately the Dropbox Javascript API requires that OAuth2 callback urls support `https`, which github.io does not. I'll try to move the demo over to my personal webspace
+at some point. For now you might want to just open up the `example/todo/` folder and poke around. 
 
 Usage
 -----
