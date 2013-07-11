@@ -1,0 +1,15 @@
+{
+  "name": "dropstore-ng",
+  "version": "1.0.0",
+  "main": "dropstore-ng.js",
+  "ignore": [
+    "example",
+    ".idea",
+    ".git"
+  ],
+  "dependencies": {
+    "angular-latest": "1.0"
+  },
+  "devDependencies": {
+  }
+}
