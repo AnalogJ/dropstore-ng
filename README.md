@@ -12,7 +12,7 @@ simple way to ensure that the AngularJS scope is updated properly. dropstore-ng 
 allowing applications to listen for local and/or remote updates to the datastores.
 
 
-### Live Demo: <a target="_blank" href="http://analogj.github.com/dropstore-ng/example/todo/">Real-time TODO app</a>.
+### Live Demo: <a target="_blank" href="https://dropstore-ng.site44.com/">Real-time TODO app</a>.
 
 Usage
 -----
@@ -62,11 +62,9 @@ the datastoreManager and the datastore objects has been modified such that their
 ```js
     ...
     .then(function(datastore){
-        return datastore.getTable('tasks');
-    })
-    .then(function(taskTable){
+        var taskTable = datastore.getTable('tasks');
         $scope.tasks =  taskTable.query();
-    });
+    })
 ```
 
 You can display the datastore report items using the standard Dropbox Datastore API commands:
@@ -219,8 +217,8 @@ dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js even
 
 ###Dropbox Datastore
 -----------
-All unmentioned instance methods for the standard Dropbox.Datastore.DatastoreManager are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
-[Dropbox SDK Documentation for Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) for more information.
+All unmentioned instance methods for the standard Dropbox.Datastore are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
+[Dropbox SDK Documentation for Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore) for more information.
 
 
 ####dropstoreDatastore.SyncStatusChanged  Event
