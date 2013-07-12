@@ -8,7 +8,6 @@
     ".git"
   ],
   "dependencies": {
-    "angular-latest": "1.0"
   },
   "devDependencies": {
   }
