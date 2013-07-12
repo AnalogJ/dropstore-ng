@@ -33,11 +33,11 @@ var myapp = angular.module('myapp', ['dropstore-ng']);
 Quick Start
 ----------------------------------
 
-Set `dropstoreService` as a service dependency in your controller:
+Set `dropstoreClient` as a service dependency in your controller:
 
 ```js
-myapp.controller('MyCtrl', ['$scope', 'dropstoreService',
-  function MyCtrl($scope, dropstoreService) {
+myapp.controller('MyCtrl', ['$scope', 'dropstoreClient',
+  function MyCtrl($scope, dropstoreClient) {
     ...
   }
 ]);

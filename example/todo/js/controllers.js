@@ -75,9 +75,7 @@ angular.module('testApp.controllers', [])
                         completed: false,
                         created: new Date()
                     });
-            $scope.newTodo = '';
-
-        }
+            $scope.newTodo = '';        }
         $scope.removeTodo = function (todo) {
             todo.deleteRecord();
         };
