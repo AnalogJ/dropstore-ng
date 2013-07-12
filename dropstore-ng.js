@@ -1,24 +1,23 @@
-/* dropstore-ng v1.0.0 | (c) 2013 Jason Kulatunga, Inc. | http://analogj.mit-license.org/
+/* dropstore-ng v1.0.1 | (c) 2013 Jason Kulatunga, Inc. | http://analogj.mit-license.org/
  */
 
 'use strict';
 
 /* Services */
+var DEVMODE = true;
+// when true, all Dropbox Datastore ops are logged to the JavaScript console
+// some critical errors and warnings are always logged, even if this is false
 
 
 angular.module("dropstore-ng", []).
-    factory('dropstoreClient', function($rootScope,$q,safeApply,dropstoreDatastoreManager) {
+    factory('dropstoreClient', function($rootScope,$q,safeApply,dropstoreDatastoreManager, logger) {
 
         //Partially based on: https://gist.github.com/katowulf/5006634
-        var dropstoreService = {};
-        console.log('Creating dropstoreClient');
+
+        logger.log('Creating dropstoreClient');
         ///////////////////////////////////////////////////////////////////////
         // Configuration
         ///////////////////////////////////////////////////////////////////////
-
-        // when true, all Dropbox Datastore ops are logged to the JavaScript console
-        // some critical errors and warnings are always logged, even if this is false
-        var DEVMODE = true;
 
         // create a dummy console object for dummy IE
         //if( typeof(console) === 'undefined' ) {
@@ -39,11 +38,11 @@ angular.module("dropstore-ng", []).
             return function(err, res){
                 safeApply($rootScope, function() {
                     if (err) {
-                        DEVMODE && console.log('dropstore "'+cmdName+'" returned error', err);
+                        logger.log('dropstore "'+cmdName+'" returned error', err);
                         deferred.reject(err)
                     } else {
-                        DEVMODE && console.log('dropstore "'+cmdName+'" returned successfully', res);
-                        deferred.resolve(dropstoreDatastoreManager(res,DEVMODE))
+                        logger.log('dropstore "'+cmdName+'" returned successfully', res);
+                        deferred.resolve(dropstoreDatastoreManager(res))
                     }
                 });
             }
@@ -52,10 +51,10 @@ angular.module("dropstore-ng", []).
             return function(err, res){
                 safeApply($rootScope,function() {
                     if (err) {
-                        DEVMODE && console.log('dropstore "'+cmdName+'" returned error', err);
+                        logger.log('dropstore "'+cmdName+'" returned error', err);
                         deferred.reject(err)
                     } else {
-                        DEVMODE && console.log('dropstore "'+cmdName+'" returned successfully', res);
+                        logger.log('dropstore "'+cmdName+'" returned successfully', res);
                         deferred.resolve(res)
                     }
                 });
@@ -66,7 +65,7 @@ angular.module("dropstore-ng", []).
         // Public Methods
         ///////////////////////////////////////////////////////////////////////
         //should never be called directly, but is available for custom calls.
-
+        var dropstoreService = {};
         /**
          * Dropbox API client representing an user or an application.
          * For an optimal user experience, applications should use a single client for all Dropbox interactions.
@@ -89,16 +88,12 @@ angular.module("dropstore-ng", []).
          */
         dropstoreService.authenticate =  function(options) {
             var deferred = $q.defer();
-            if(options){
-                dropstoreService._client.authenticate(options,authDeferredCallback(deferred, 'authenticate'));
-                return deferred.promise;
-            }
-            else{
-                dropstoreService._client.authenticate();
-            }
+
+            dropstoreService._client.authenticate(options,authDeferredCallback(deferred, 'authenticate'));
+            return deferred.promise;
         }
         dropstoreService.getDatastoreManager = function(){
-            return dropstoreDatastoreManager(dropstoreService._client,DEVMODE);
+            return dropstoreDatastoreManager(dropstoreService._client);
         }
         /**
          * Invalidates and forgets the user's Dropbox OAuth 2 access token.
@@ -140,11 +135,10 @@ angular.module("dropstore-ng", []).
 
         return dropstoreService;
     })
-    .factory('dropstoreDatastoreManager', function($rootScope,$q,safeApply, dropstoreDatastore) {
+    .factory('dropstoreDatastoreManager', function($rootScope,$q,safeApply, dropstoreDatastore, logger) {
 
-        return function(_client, DEVMODE){
-            DEVMODE = DEVMODE || false;
-            console.log('Creating dropstoreDatastoreManager');
+        return function(_client){
+            logger.log('Creating dropstoreDatastoreManager');
             ///////////////////////////////////////////////////////////////////////
             // Private Methods
             ///////////////////////////////////////////////////////////////////////
@@ -152,11 +146,11 @@ angular.module("dropstore-ng", []).
                 return function(err, res){
                     safeApply($rootScope, function() {
                         if (err) {
-                            DEVMODE && console.log('dropstore "'+cmdName+'" returned error', err);
+                            logger.log('dropstore "'+cmdName+'" returned error', err);
                             deferred.reject(err)
                         } else {
-                            DEVMODE && console.log('dropstore "'+cmdName+'" returned successfully', res);
-                            deferred.resolve(dropstoreDatastore(dropstoreDatastoreManagerService, res,DEVMODE))
+                            logger.log('dropstore "'+cmdName+'" returned successfully', res);
+                            deferred.resolve(dropstoreDatastore(dropstoreDatastoreManagerService, res))
                         }
                     });
                 }
@@ -165,10 +159,10 @@ angular.module("dropstore-ng", []).
                 return function(err, res){
                     safeApply($rootScope,function() {
                         if (err) {
-                            DEVMODE && console.log('dropstore "'+cmdName+'" returned error', err);
+                            logger.log('dropstore "'+cmdName+'" returned error', err);
                             deferred.reject(err)
                         } else {
-                            DEVMODE && console.log('dropstore "'+cmdName+'" returned successfully', res);
+                            logger.log('dropstore "'+cmdName+'" returned successfully', res);
                             deferred.resolve(res)
                         }
                     });
@@ -255,11 +249,10 @@ angular.module("dropstore-ng", []).
             return dropstoreDatastoreManagerService;
         }
     })
-    .factory('dropstoreDatastore', function($rootScope,$q,safeApply) {
+    .factory('dropstoreDatastore', function($rootScope,$q,safeApply, logger) {
 
-        return function(datastoreManager,datastore, DEVMODE){
-            DEVMODE = DEVMODE || false;
-            console.log('Creating dropstoreDatastore');
+        return function(datastoreManager,datastore){
+            logger.log('Creating dropstoreDatastore');
 
             ///////////////////////////////////////////////////////////////////////
             // Private Methods
@@ -267,18 +260,18 @@ angular.module("dropstore-ng", []).
             function immediateDeferredCallback(deferred, value, cmdName){
 
                 safeApply($rootScope,function() {
-                        DEVMODE && console.log('dropstore "'+cmdName+'" returned successfully', value);
-                        deferred.resolve(value)
-                    });
+                    logger.log('dropstore "'+cmdName+'" returned successfully', value);
+                    deferred.resolve(value)
+                });
             }
             function basicDeferredCallback(deferred, cmdName){
                 return function(err, res){
                     safeApply($rootScope,function() {
                         if (err) {
-                            DEVMODE && console.log('dropstore "'+cmdName+'" returned error', err);
+                            logger.log('dropstore "'+cmdName+'" returned error', err);
                             deferred.reject(err)
                         } else {
-                            DEVMODE && console.log('dropstore "'+cmdName+'" returned successfully', res);
+                            logger.log('dropstore "'+cmdName+'" returned successfully', res);
                             deferred.resolve(res)
                         }
                     });
@@ -370,6 +363,17 @@ angular.module("dropstore-ng", []).
                 }
             }
         }
+    }])
+    .factory('logger', ['$window',function($window) {
+        var DEVMODE = $window.DEVMODE || false;
+        var logger = {};
+        logger.log = function(){
+            DEVMODE && console.log.apply(console, arguments);
+        }
+        logger.always = function(){
+            console.log.apply(console, arguments);
+        }
+        return logger;
     }])
     .factory('recordWrapper', [function() {
         return function (record, fieldId){
