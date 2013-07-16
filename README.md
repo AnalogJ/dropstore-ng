@@ -16,7 +16,7 @@ allowing applications to listen for local and/or remote updates to the datastore
 
 Usage
 -----
-Include [drobox javascript sdk](https://www.dropbox.com/developers/datastore/sdks/js), angular.js and dropstore-ng.js in your application.
+Include [dropbox javascript sdk](https://www.dropbox.com/developers/datastore/sdks/js), angular.js and dropstore-ng.js in your application.
 
 ```html
 <script src="https://www.dropbox.com/static/api/1/dropbox-datastores-0.1.0-b2.js" type="text/javascript"></script>
