@@ -1,4 +1,4 @@
-/* dropstore-ng v1.0.3 | (c) 2013 Jason Kulatunga, Inc. | http://analogj.mit-license.org/
+/* dropstore-ng v1.0.4 | (c) 2013 Jason Kulatunga, Inc. | http://analogj.mit-license.org/
  */
 
 'use strict';
@@ -7,6 +7,18 @@
 var DEVMODE = true;
 // when true, all Dropbox Datastore ops are logged to the JavaScript console
 // some critical errors and warnings are always logged, even if this is false
+angular.module("recordWrapper", [])
+.factory('recordWrapper', [function() {
+    return function (record, fieldId){
+        var _record = record;
+        return {
+            get mdl() { console.log('reading from mdl:'+fieldId, _record); return _record.get(fieldId); },
+            set mdl(val) { console.log('write to mdl:'+fieldId, _record); _record.set(fieldId, val||''); }
+        }
+
+
+    }
+}])
 
 
 angular.module("dropstore-ng", []).
@@ -364,25 +376,28 @@ angular.module("dropstore-ng", []).
             }
         }
     }])
-    .factory('logger', ['$window',function($window) {
-        var DEVMODE = $window.DEVMODE || false;
-        var logger = {};
-        logger.log = function(){
-            DEVMODE && console.log.apply(console, arguments);
-        }
-        logger.always = function(){
-            console.log.apply(console, arguments);
-        }
-        return logger;
-    }])
-    .factory('recordWrapper', [function() {
-        return function (record, fieldId){
-            var _record = record;
-            return {
-                get mdl() { return _record.get(fieldId); },
-                set mdl(val) { _record.set(fieldId, val); }
-            }
-        }
-    }])
+    .provider('logger', function(){
+		this.DEVMODE = false;
+		
+		this.setDEVMODE = function(devmode){
+			this.DEVMODE = devmode;
+		}
+		
+		this.$get = ['$window',function($window) {
+			var DEVMODE = this.DEVMODE;
+			var logger = {};
+			logger.log = function(){
+				DEVMODE && console.log.apply(console, arguments);
+			}
+			logger.always = function(){
+				console.log.apply(console, arguments);
+			}
+			return logger;
+		}]		
+	})
+	.config(function(loggerProvider){
+        loggerProvider.setDEVMODE(true);
+    });
+
 
 
