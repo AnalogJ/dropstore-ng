@@ -1,0 +1,13 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/analogj/node-angular-less-seed.git"
+  },
+  "dependencies": {
+    "connect": "~2.8.4",
+    "nconf": "~0.6.7"
+  }
+}
