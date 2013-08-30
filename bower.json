@@ -1,0 +1,7 @@
+{
+    "name": "dropstore-ng-example-todo",
+    "version": "0.0.1",
+    "dependencies": {
+        "dropstore-ng": "~1.0.4"
+    }
+}
