@@ -2,7 +2,7 @@ dropstore-ng
 ============
 
 dropstore-ng is a set of [AngularJS](http://angularjs.org/) bindings for [Dropbox Datastore](https://www.dropbox.com/developers/datastore).
-With Drobox Datastore, AngularJS and dropstore-ng you can easily create completely serverless client-side applications with syncing across multiple devices !
+With Dropbox Datastore, AngularJS and dropstore-ng you can easily create completely serverless client-side applications with syncing across multiple devices !
 
 The bindings wrap the first three tiers (Client, DatastoreManager, Datastore) of the Dropbox Datastore API within
 [Angular Promises](http://docs.angularjs.org/api/ng.$q). This is because only the first three tiers use callbacks and because
@@ -12,7 +12,7 @@ simple way to ensure that the AngularJS scope is updated properly. dropstore-ng 
 allowing applications to listen for local and/or remote updates to the datastores.
 
 
-### Live Demo: <a target="_blank" href="https://dropstore-ng.site44.com/">Real-time TODO app</a>.
+### Live Demo: <a target="_blank" href="https://dropstore-ng.herokuapp.com/">Real-time TODO app</a>.
 
 Check out the `example-todo` branch for more the live demo code.
 
@@ -46,7 +46,7 @@ myapp.controller('MyCtrl', ['$scope', 'dropstoreClient',
 ```
 
 Create an `authentication` handler that will be called when the controller first loads.
-drobstore-ng just wraps the standard [authenticate](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.authenticate)
+dropstore-ng just wraps the standard [authenticate](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.authenticate)
  method inside of a promise. The success callback of the authenticate method is a modified [datastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) object.
 
 ```js
