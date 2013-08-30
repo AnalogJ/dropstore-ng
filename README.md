@@ -12,7 +12,7 @@ simple way to ensure that the AngularJS scope is updated properly. dropstore-ng 
 allowing applications to listen for local and/or remote updates to the datastores.
 
 
-### Live Demo: <a target="_blank" href="https://dropstore-ng.site44.com/">Real-time TODO app</a>.
+### Live Demo: <a target="_blank" href="https://dropstore-ng.herokuapp.com/">Real-time TODO app</a>.
 
 Usage
 -----
