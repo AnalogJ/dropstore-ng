@@ -14,6 +14,8 @@ allowing applications to listen for local and/or remote updates to the datastore
 
 ### Live Demo: <a target="_blank" href="https://dropstore-ng.site44.com/">Real-time TODO app</a>.
 
+Check out the `example-todo` branch for more the live demo code.
+
 Usage
 -----
 Include [dropbox javascript sdk](https://www.dropbox.com/developers/datastore/sdks/js), angular.js and dropstore-ng.js in your application.
