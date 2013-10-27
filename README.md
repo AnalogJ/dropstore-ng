@@ -21,7 +21,7 @@ Usage
 Include [dropbox javascript sdk](https://www.dropbox.com/developers/datastore/sdks/js), angular.js and dropstore-ng.js in your application.
 
 ```html
-<script src="https://www.dropbox.com/static/api/1/dropbox-datastores-0.1.0-b2.js" type="text/javascript"></script>
+<script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js" type="text/javascript"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 <script src="dropstore-ng.js"></script>
 ```
