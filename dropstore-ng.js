@@ -239,6 +239,14 @@ angular.module("dropstore-ng", []).
                 dropstoreDatastoreManagerService._datastoreManager.listDatastoreIds(basicDeferredCallback(deferred, 'listDatastoreIds'));
                 return deferred.promise;
             }
+            /**
+             * Shuts down the DatastoreManager. All Dropbox.Datastore instances obtained through this DatastoreManager become invalid.
+             * @returns {*} void
+             */
+            dropstoreDatastoreManagerService.close =  function() {
+                return dropstoreDatastoreManagerService._datastoreManager.close();
+            }
+
             ///////////////////////////////////////////////////////////////////////
             // Public PUBSUB Methods // Listen for Datasource Changes.
             ///////////////////////////////////////////////////////////////////////
