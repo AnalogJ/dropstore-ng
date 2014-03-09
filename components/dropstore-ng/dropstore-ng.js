@@ -139,7 +139,7 @@ angular.module("dropstore-ng", []).
             return dropstoreService._client.credentials.apply(ctx, arguments);
         }
         dropstoreService.isAuthenticated = function(){
-            return dropstoreService._client.isAuthenticated.apply(ctx, arguments);
+            return dropstoreService._client.isAuthenticated();
         }
         dropstoreService.getUserInfo = function(){
             return dropstoreService._client.getUserInfo.apply(ctx, arguments);
