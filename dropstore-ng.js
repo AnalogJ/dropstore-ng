@@ -1,4 +1,4 @@
-/* dropstore-ng v1.0.4 | (c) 2013 Jason Kulatunga, Inc. | http://analogj.mit-license.org/
+/* dropstore-ng v1.0.6 | (c) 2013 Jason Kulatunga, Inc. | http://analogj.mit-license.org/
  */
 
 'use strict';
