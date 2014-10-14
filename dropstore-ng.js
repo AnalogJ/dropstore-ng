@@ -200,12 +200,12 @@ angular.module("dropstore-ng", []).
             }
             /**
              * Asynchronously opens the datastore with the given ID, then calls callback with the corresponding Datastore object (or an error).
-             * TODO: documentation looks incorrect: No parameters.
+             * @param datastoreId
              * @returns {*} Dropbox.Datastore
              */
-            dropstoreDatastoreManagerService.openDatastore =  function() {
+            dropstoreDatastoreManagerService.openDatastore =  function(datastoreId) {
                 var deferred = $q.defer();
-                dropstoreDatastoreManagerService._datastoreManager.openDatastore(managerDeferredCallback(deferred, 'openDatastore'));
+                dropstoreDatastoreManagerService._datastoreManager.openDatastore(datastoreId, managerDeferredCallback(deferred, 'openDatastore'));
                 return deferred.promise;
             }
             /**
@@ -221,12 +221,12 @@ angular.module("dropstore-ng", []).
             /**
              * Asynchronously deletes the datastore with the given ID, then calls callback.
              * Deleting a nonexistent datastore is not considered an error.
-             * TODO: documentation looks incorrect: No parameters.
+             * @param datastoreId
              * @returns {*} null
              */
-            dropstoreDatastoreManagerService.deleteDatastore =  function() {
+            dropstoreDatastoreManagerService.deleteDatastore =  function(datastoreId) {
                 var deferred = $q.defer();
-                dropstoreDatastoreManagerService._datastoreManager.deleteDatastore(basicDeferredCallback(deferred, 'deleteDatastore'));
+                dropstoreDatastoreManagerService._datastoreManager.deleteDatastore(datastoreId, basicDeferredCallback(deferred, 'deleteDatastore'));
                 return deferred.promise;
             }
             /**
