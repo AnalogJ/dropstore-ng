@@ -1,6 +1,6 @@
 {
   "name": "dropstore-ng",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "dropstore-ng.js",
   "ignore": [
     "example",
