@@ -88,15 +88,15 @@ As I stated above, only the first three tiers of the Dropbox Datastore API are w
 Only methods that make use of callbacks are wrapped in promises, all other instance methods are passed through like usual.
 I've included the full documentation on the modified instance methods, and how to use them, below:
 
-###Dropbox Client
+### Dropbox Client
 -----------
 All unmentioned instance methods for the standard Dropbox.Client are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
 [Dropbox SDK Documentation for Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) for more information.
 
-####dropstoreClient.create
+#### dropstoreClient.create
 alias for [Dropbox.client.constructor](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client)
 
-####dropstoreClient.authenticate
+#### dropstoreClient.authenticate
 [Dropbox.Client.authenticate](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.authenticate) has been wrapped in a promise, such that the callback parameter is not necessary.
 On success, a [dropstoreDatastoreManager](#dropbox-datastore-datastoremanager) object is returned, which wraps the [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager)
 ```js
@@ -110,10 +110,10 @@ On success, a [dropstoreDatastoreManager](#dropbox-datastore-datastoremanager) o
         };
 ```
 
-####dropstoreClient.getDatastoreManager
+#### dropstoreClient.getDatastoreManager
 [Dropbox.Client.getDatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.getDatastoreManager) has been modified to return a [dropstoreDatastoreManager](#dropbox-datastore-datastoremanager), which wraps the standard [Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) in promises.
 
-####dropstoreClient.signOut
+#### dropstoreClient.signOut
 [Dropbox.Client.signOut](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.signOut) has been wrapped in a promise, such that the callback parameter is not necessary.
 On success nothing is returned, however failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
 ```js
@@ -127,7 +127,7 @@ On success nothing is returned, however failures will passthrough a [Dropbox.Api
         };
 ```
 
-####dropstoreClient.getAccountInfo
+#### dropstoreClient.getAccountInfo
 [Dropbox.Client.getAccountInfo](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client.getAccountInfo) has been wrapped in a promise, such that the callback parameter is not necessary.
 On success the Dropbox.AccountInfo object will be passed through and failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
 ```js
@@ -141,17 +141,17 @@ On success the Dropbox.AccountInfo object will be passed through and failures wi
         };
 ```
 
-####Other methods
+#### Other methods
 [Dropbox.Client](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Client) has many methods. Currently only the following methods are transparently aliased to the Client.
 `dropstoreClient.dropboxUid`, `dropstoreClient.credentials`, `dropstoreClient.isAuthenticated`, `dropstoreClient.getUserInfo`
 
-###Dropbox Datastore DatastoreManager
+### Dropbox Datastore DatastoreManager
 -----------
 All unmentioned instance methods for the standard Dropbox.Datastore.DatastoreManager are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
 [Dropbox SDK Documentation for Dropbox.Datastore.DatastoreManager](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager) for more information.
 
 
-####dropstoreDatastoreManager.openDefaultDatastore
+#### dropstoreDatastoreManager.openDefaultDatastore
 [Dropbox.Datastore.DatastoreManager.openDefaultDatastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager.openDefaultDatastore) has been wrapped in a promise, such that the callback parameter is not necessary.
 On success, a [dropstoreDatastore](#dropbox-datastore) object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
 Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
@@ -165,12 +165,12 @@ Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developer
             ..
         };
 ```
-####dropstoreDatastoreManager.openDatastore dropstoreDatastoreManager.createDatastore
+#### dropstoreDatastoreManager.openDatastore dropstoreDatastoreManager.createDatastore
 `openDatastore` and `createDatastore` follow the pattern listed above.
 On success, a [dropstoreDatastore](#dropbox-datastore) object is returned, which wraps the [Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore).
 Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
 
-####dropstoreDatastoreManager.listDatastoreIds
+#### dropstoreDatastoreManager.listDatastoreIds
 [Dropbox.Datastore.DatastoreManager.listDatastoreIds](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager.listDatastoreIds) has been wrapped in a promise, such that the callback parameter is not necessary.
 On success, a `Array<String>` is returned, which lists the IDs of all accessible datastores.
 Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
@@ -185,7 +185,7 @@ Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developer
         };
 ```
 
-####dropstoreDatastoreManager.deleteDatastore
+#### dropstoreDatastoreManager.deleteDatastore
 [Dropbox.Datastore.DatastoreManager.deleteDatastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore.DatastoreManager.deleteDatastore) has been wrapped in a promise, such that the callback parameter is not necessary.
 On success nothing is returned
 Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.ApiError) object
@@ -199,7 +199,7 @@ Failures will passthrough a [Dropbox.ApiError](https://www.dropbox.com/developer
             ..
         };
 ```
-####dropstoreDatastoreManager.DatastoreListChanged Event
+#### dropstoreDatastoreManager.DatastoreListChanged Event
 dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js events, and ensure that your $scope is updated properly.
 
 ```js
@@ -217,13 +217,13 @@ dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js even
 ```
 
 
-###Dropbox Datastore
+### Dropbox Datastore
 -----------
 All unmentioned instance methods for the standard Dropbox.Datastore are transparently aliased. Only wrapped/changed functionality  methods are documented here. Refer to
 [Dropbox SDK Documentation for Dropbox.Datastore](https://www.dropbox.com/developers/datastore/docs/js#Dropbox.Datastore) for more information.
 
 
-####dropstoreDatastore.SyncStatusChanged  Event
+#### dropstoreDatastore.SyncStatusChanged  Event
 dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js events, and ensure that your $scope is updated properly.
 
 ```js
@@ -236,7 +236,7 @@ dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js even
     datastore.UnsubscribeSyncStatusChanged (ptr);
 ```
 
-####dropstoreDatastore.RecordsChanged Event
+#### dropstoreDatastore.RecordsChanged Event
 dropstore-ng allows you to easily subscribe and unsubscribe from dropbox.js events, and ensure that your $scope is updated properly.
 The `SubscribeRecordsChanged` method also takes a optional secondary parameter `tableid` that automatically retrieves the records that changed for a specific table.
 
